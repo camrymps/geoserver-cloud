@@ -9,7 +9,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: "standalone,pgconfig"
     volumes:
-      - ./geoserver-cloud-config:/etc/geoserver
+      - ./config:/etc/geoserver
     ports:
       - 9101:8080
     # network_mode: host
@@ -28,7 +28,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: "standalone,pgconfig"
     volumes:
-      - ./geoserver-cloud-config:/etc/geoserver
+      - ./config:/etc/geoserver
     ports:
       - 9106:8080
     # network_mode: host
