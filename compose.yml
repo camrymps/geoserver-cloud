@@ -1,0 +1,44 @@
+networks:
+  geoserver-kube_geoserver-net:
+    external: true
+
+services:
+  # WFS microservice, port dynamically allocated to allow scaling (e.g docker compose scale wfs=5)
+  wfs:
+    image: geoservercloud/geoserver-cloud-wfs:1.8.0
+    environment:
+      SPRING_PROFILES_ACTIVE: "standalone,pgconfig"
+    volumes:
+      - ./geoserver-cloud-config:/etc/geoserver
+    ports:
+      - 9101:8080
+    # network_mode: host
+    networks:
+      - geoserver-kube_geoserver-net
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 1G
+
+  # WEB UI microservice
+  webui:
+    image: geoservercloud/geoserver-cloud-webui:1.8.0
+    environment:
+      SPRING_PROFILES_ACTIVE: "standalone,pgconfig"
+    volumes:
+      - ./geoserver-cloud-config:/etc/geoserver
+    ports:
+      - 9106:8080
+    # network_mode: host
+    networks:
+      - geoserver-kube_geoserver-net
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 1G
+
+

@@ -1,0 +1,33 @@
+volumes:
+  pgconfigdb_data:
+
+networks:
+  geoserver-net:
+    driver: bridge
+
+services:
+  pgconfigdb:
+    image: postgis/postgis:latest
+    # host config for both geoserver catalog and acl
+    shm_size: 2g
+    environment:
+      POSTGRES_DB: pgconfig
+      POSTGRES_USER: pgconfig
+      POSTGRES_PASSWORD: pgconfig
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pgconfig"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports:
+      - 5432:5432
+    # network_mode: host
+    networks:
+      - geoserver-net
+    volumes:
+      - pgconfigdb_data:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          cpus: '4.0'
+          memory: 4G
